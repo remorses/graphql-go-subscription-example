@@ -9,5 +9,4 @@ require (
 	github.com/graph-gophers/graphql-transport-ws v0.0.0-20190611222414-40c048432299
 	github.com/graphql-go/graphql v0.7.9
 	github.com/graphql-go/handler v0.2.3
-	github.com/stretchr/testify v1.5.1 // indirect
 )
