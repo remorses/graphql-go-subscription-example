@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -54,13 +55,13 @@ func main() {
 						c := make(chan interface{}) // XXX only works with `chan interface{}`
 						go func() {
 							for _, r := range elements {
-								time.Sleep(1 * time.Second)
 								select {
 								case <-p.Context.Done():
 									close(c)
 									return
 								case c <- r:
 								}
+								time.Sleep(1 * time.Second)
 							}
 							close(c)
 						}()
@@ -82,7 +83,7 @@ func main() {
 	})
 
 	// graphQL handler
-	s := &graphql.SubscriptableSchema{Schema: schema}
+	s := &SubscriptableSchema{Schema: schema}
 	graphQLHandler := graphqlws.NewHandlerFunc(s, h)
 	http.HandleFunc("/", graphQLHandler)
 	println("http://localhost:8070")
@@ -90,4 +91,40 @@ func main() {
 	if err := http.ListenAndServe(fmt.Sprintf("localhost:%d", 8070), nil); err != nil {
 		panic(err)
 	}
+}
+
+// SubscriptableSchema implements `graphql-transport-ws` `GraphQLService` interface: https://github.com/graph-gophers/graphql-transport-ws/blob/40c0484322990a129cac2f2d2763c3315230280c/graphqlws/internal/connection/connection.go#L53
+// this struct should be in the Handler package
+// you can pass `SubscriptableSchema` to `graphql-transport-ws` `NewHandlerFunc`
+type SubscriptableSchema struct {
+	Schema     graphql.Schema
+	RootObject map[string]interface{}
+}
+
+// Subscribe method let you use SubscriptableSchema with graphql-transport-ws https://github.com/graph-gophers/graphql-transport-ws
+func (self *SubscriptableSchema) Subscribe(ctx context.Context, queryString string, operationName string, variables map[string]interface{}) (<-chan interface{}, error) {
+	c := graphql.Subscribe(graphql.Params{
+		Schema:         self.Schema,
+		Context:        ctx,
+		OperationName:  operationName,
+		RequestString:  queryString,
+		RootObject:     self.RootObject,
+		VariableValues: variables,
+	})
+	to := make(chan interface{})
+	go func() {
+		defer close(to)
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case res, more := <-c:
+				if !more {
+					return
+				}
+				to <- res
+			}
+		}
+	}()
+	return to, nil
 }

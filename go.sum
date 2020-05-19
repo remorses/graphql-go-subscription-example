@@ -6,3 +6,5 @@ github.com/graphql-go/handler v0.2.3 h1:CANh8WPnl5M9uA25c2GBhPqJhE53Fg0Iue/fRNla
 github.com/graphql-go/handler v0.2.3/go.mod h1:leLF6RpV5uZMN1CdImAxuiayrYYhOk33bZciaUGaXeU=
 github.com/remorses/graphql v0.7.9-0.20200518180521-183515e8badf h1:/Lf3wTAJOZdd/RYmrWFIefcLQS5G1FvgmoJ2/loFdRk=
 github.com/remorses/graphql v0.7.9-0.20200518180521-183515e8badf/go.mod h1:nKiHzRM0qopJEwCITUuIsxk9PlVlwIiiI8pnJEhordQ=
+github.com/remorses/graphql v0.7.9-0.20200519101133-eb0fdaee1058 h1:fej5S2XMjfcjzn3dKo4SyBmZt2eqtoWwG9ESdGL5I3o=
+github.com/remorses/graphql v0.7.9-0.20200519101133-eb0fdaee1058/go.mod h1:nKiHzRM0qopJEwCITUuIsxk9PlVlwIiiI8pnJEhordQ=

@@ -2,7 +2,7 @@ module github.com/remorses/graphql-go-subscription-example
 
 go 1.13
 
-replace github.com/graphql-go/graphql => github.com/remorses/graphql v0.7.9-0.20200518180521-183515e8badf
+replace github.com/graphql-go/graphql => github.com/remorses/graphql v0.7.9-0.20200519101133-eb0fdaee1058
 
 require (
 	github.com/gorilla/websocket v1.4.2 // indirect
